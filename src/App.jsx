@@ -1,31 +1,186 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
-import * as THREE from 'three';
-import { MSDFTextGeometry, MSDFTextMaterial } from 'three-msdf-text-utils';
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
-import './index.css';
-import Experience from './Experience.jsx';
+import React, { useState, useRef, useEffect } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { Environment } from '@react-three/drei'
+import * as THREE from 'three'
+import { MSDFTextGeometry, MSDFTextMaterial } from 'three-msdf-text-utils'
+import { uniforms } from "three-msdf-text-utils"
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import './index.css'
+import Experience from './Experience.jsx'
 
-import atlasURL from './font/BagossStandard-Regular.png';
-import fnt from './font/BagossStandard-Regular-msdf.json';
+import atlasURL from './font/BagossStandard-Regular.png'
+import fnt from './font/BagossStandard-Regular-msdf.json'
 
 function AddText() {
-  const [fontLoaded, setFontLoaded] = useState(false);
-  const [textProperties, setTextProperties] = useState(null);
+  const [fontLoaded, setFontLoaded] = useState(false)
+  const [textProperties, setTextProperties] = useState(null)
+
+  const material = new THREE.ShaderMaterial({
+    side: THREE.DoubleSide,
+    transparent: true,
+    defines: {
+        IS_SMALL: false,
+    },
+    extensions: {
+        derivatives: true,
+    },
+    uniforms: {
+        // Common
+        ...uniforms.common,
+        
+        // Rendering
+        ...uniforms.rendering,
+        
+        // Strokes
+        ...uniforms.strokes,
+    },
+    vertexShader: `
+        // Attribute
+        attribute vec2 layoutUv;
+
+        attribute float lineIndex;
+
+        attribute float lineLettersTotal;
+        attribute float lineLetterIndex;
+
+        attribute float lineWordsTotal;
+        attribute float lineWordIndex;
+
+        attribute float wordIndex;
+
+        attribute float letterIndex;
+
+        // Varyings
+        varying vec2 vUv;
+        varying vec2 vLayoutUv;
+        varying vec3 vViewPosition;
+        varying vec3 vNormal;
+
+        varying float vLineIndex;
+
+        varying float vLineLettersTotal;
+        varying float vLineLetterIndex;
+
+        varying float vLineWordsTotal;
+        varying float vLineWordIndex;
+
+        varying float vWordIndex;
+
+        varying float vLetterIndex;
+
+        void main() {
+            // Output
+            vec4 mvPosition = vec4(position, 1.0);
+            mvPosition = modelViewMatrix * mvPosition;
+            gl_Position = projectionMatrix * mvPosition;
+
+            // Varyings
+            vUv = uv;
+            vLayoutUv = layoutUv;
+            vViewPosition = -mvPosition.xyz;
+            vNormal = normal;
+
+            vLineIndex = lineIndex;
+
+            vLineLettersTotal = lineLettersTotal;
+            vLineLetterIndex = lineLetterIndex;
+
+            vLineWordsTotal = lineWordsTotal;
+            vLineWordIndex = lineWordIndex;
+
+            vWordIndex = wordIndex;
+
+            vLetterIndex = letterIndex;
+        }
+    `,
+    fragmentShader: `
+        // Varyings
+        varying vec2 vUv;
+
+        // Uniforms: Common
+        uniform float uOpacity;
+        uniform float uThreshold;
+        uniform float uAlphaTest;
+        uniform vec3 uColor;
+        uniform sampler2D uMap;
+
+        // Uniforms: Strokes
+        uniform vec3 uStrokeColor;
+        uniform float uStrokeOutsetWidth;
+        uniform float uStrokeInsetWidth;
+
+        // Utils: Median
+        float median(float r, float g, float b) {
+            return max(min(r, g), min(max(r, g), b));
+        }
+
+        void main() {
+            // Common
+            // Texture sample
+            vec3 s = texture2D(uMap, vUv).rgb;
+
+            // Signed distance
+            float sigDist = median(s.r, s.g, s.b) - 0.5;
+
+            float afwidth = 1.4142135623730951 / 2.0;
+
+            #ifdef IS_SMALL
+                float alpha = smoothstep(uThreshold - afwidth, uThreshold + afwidth, sigDist);
+            #else
+                float alpha = clamp(sigDist / fwidth(sigDist) + 0.5, 0.0, 1.0);
+            #endif
+
+            // Strokes
+            // Outset
+            float sigDistOutset = sigDist + uStrokeOutsetWidth * 0.5;
+
+            // Inset
+            float sigDistInset = sigDist - uStrokeInsetWidth * 0.5;
+
+            #ifdef IS_SMALL
+                float outset = smoothstep(uThreshold - afwidth, uThreshold + afwidth, sigDistOutset);
+                float inset = 1.0 - smoothstep(uThreshold - afwidth, uThreshold + afwidth, sigDistInset);
+            #else
+                float outset = clamp(sigDistOutset / fwidth(sigDistOutset) + 0.5, 0.0, 1.0);
+                float inset = 1.0 - clamp(sigDistInset / fwidth(sigDistInset) + 0.5, 0.0, 1.0);
+            #endif
+
+            // Border
+            float border = outset * inset;
+
+            // Alpha Test
+            if (alpha < uAlphaTest) discard;
+
+            // Output: Common
+            vec4 filledFragColor = vec4(uColor, uOpacity * alpha);
+
+            // Output: Strokes
+            vec4 strokedFragColor = vec4(uStrokeColor, uOpacity * border);
+
+            // gl_FragColor = filledFragColor;
+            gl_FragColor = vec4(0.0,0.0,1.0,1.0);
+
+        }
+    `,
+})
+
+
+// =======================
 
   const initializeFont = async () => {
     const [atlas] = await Promise.all([loadFontAtlas(atlasURL)]);
-    const loader = new FontLoader();
-    // const font = loader.parse(fnt);
-    const geometry = new MSDFTextGeometry({
-      text: 'ABCDEF',
-      font: fnt,
-    });
-    const material = new MSDFTextMaterial();
     material.uniforms.uMap.value = atlas;
-    const mesh = new THREE.Mesh(geometry, material);
-    return { geometry, material, mesh };
+
+    const meshes = TEXT.map((text) => {
+      const geometry = new MSDFTextGeometry({
+        text: text,
+        font: fnt,
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+      return mesh;
+    });
+
+    return { meshes, material };
   };
 
   const loadFontAtlas = (path) => {
@@ -48,20 +203,26 @@ function AddText() {
   return (
     <group>
       {fontLoaded && textProperties && (
-        <mesh
-          castShadow
-          receiveShadow
-          material={textProperties.material}
-          geometry={textProperties.geometry}
-          position={[1, 0, 0]}
-          scale={0.1}
-          rotation={[Math.PI, 0.2 * Math.PI, 0]}
-        >
-        </mesh>
+        <group>
+          {textProperties.meshes.map((mesh, index) => (
+            <mesh
+              key={index}
+              castShadow
+              receiveShadow
+              material={textProperties.material}
+              geometry={mesh.geometry}
+              position={[1, index * 0.5, index * 0.0]} // Adjust the spacing between texts
+              scale={0.01}
+              rotation={[Math.PI, Math.PI, 0]}
+            />
+          ))}
+        </group>
       )}
     </group>
   );
 }
+
+const TEXT = ['Christian', 'Hohenbild', 'Endrick', 'Portfolio'];
 
 function App() {
   return (
@@ -75,3 +236,4 @@ function App() {
 }
 
 export default App;
+
