@@ -20,18 +20,21 @@ function AddText() {
 
   let position = 0
   let speed = 0
+  let targetspeed = 0
   const scroller = new VirtualScroll()
   scroller.on(event => {
 	// wrapper.style.transform = `translateY(${event.y}px)`
   position = event.y / 2000
   speed = event.deltaY / 1000
+  
   })
 
   useFrame((state, delta) => {
   textRef.current.position.y = -position
-  
-  console.log(material.uniforms.uSpeed.value)
-  materialRef.current.uniforms.uSpeed.value = speed ;
+  speed *= 0.9
+  // console.log(material.uniforms.uSpeed.value)
+  targetspeed += ( speed - targetspeed ) * 0.1
+  materialRef.current.uniforms.uSpeed.value = targetspeed
   })
 
   const material = new THREE.ShaderMaterial({
