@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame } from '@react-three/fiber'
 import { Environment } from '@react-three/drei'
 import * as THREE from 'three'
 import { MSDFTextGeometry, MSDFTextMaterial } from 'three-msdf-text-utils'
 import { uniforms } from "three-msdf-text-utils"
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import VirtualScroll from 'virtual-scroll'
 import './index.css'
 import Experience from './Experience.jsx'
 
@@ -14,6 +14,25 @@ import fnt from './font/BagossStandard-Regular-msdf.json'
 function AddText() {
   const [fontLoaded, setFontLoaded] = useState(false)
   const [textProperties, setTextProperties] = useState(null)
+
+  const textRef = useRef()
+  const materialRef = useRef(null)
+
+  let position = 0
+  let speed = 0
+  const scroller = new VirtualScroll()
+  scroller.on(event => {
+	// wrapper.style.transform = `translateY(${event.y}px)`
+  position = event.y / 2000
+  speed = event.deltaY / 1000
+  })
+
+  useFrame((state, delta) => {
+  textRef.current.position.y = -position
+  
+  console.log(material.uniforms.uSpeed.value)
+  materialRef.current.uniforms.uSpeed.value = speed ;
+  })
 
   const material = new THREE.ShaderMaterial({
     side: THREE.DoubleSide,
@@ -25,6 +44,9 @@ function AddText() {
         derivatives: true,
     },
     uniforms: {
+
+        uSpeed : { value: 0 },
+
         // Common
         ...uniforms.common,
         
@@ -68,16 +90,31 @@ function AddText() {
 
         varying float vLetterIndex;
 
-        void main() {
-            // Output
-            vec4 mvPosition = vec4(position, 1.0);
-            mvPosition = modelViewMatrix * mvPosition;
-            gl_Position = projectionMatrix * mvPosition;
+        mat4 rotationMatrix(vec3 axis, float angle) {
+          axis = normalize(axis);
+          float s = sin(angle);
+          float c = cos(angle);
+          float oc = 1.0 - c;
+          
+          return mat4(oc * axis.x * axis.x + c,           oc * axis.x * axis.y - axis.z * s,  oc * axis.z * axis.x + axis.y * s,  0.0,
+                      oc * axis.x * axis.y + axis.z * s,  oc * axis.y * axis.y + c,           oc * axis.y * axis.z - axis.x * s,  0.0,
+                      oc * axis.z * axis.x - axis.y * s,  oc * axis.y * axis.z + axis.x * s,  oc * axis.z * axis.z + c,           0.0,
+                      0.0,                                0.0,                                0.0,                                1.0);
+      }
+      
+      vec3 rotate(vec3 v, vec3 axis, float angle) {
+        mat4 m = rotationMatrix(axis, angle);
+        return (m * vec4(v, 1.0)).xyz;
+      }
 
+      uniform float uSpeed;
+
+        void main() {
+          
             // Varyings
             vUv = uv;
             vLayoutUv = layoutUv;
-            vViewPosition = -mvPosition.xyz;
+           
             vNormal = normal;
 
             vLineIndex = lineIndex;
@@ -91,6 +128,18 @@ function AddText() {
             vWordIndex = wordIndex;
 
             vLetterIndex = letterIndex;
+
+            // Output
+            vec3 newpos = position;
+
+            newpos = rotate(newpos, vec3(0.0, 0.0, 1.0), uSpeed);
+            // newpos = rotate(newpos, vec3(0.0, 0.0, 1.0), 0.1);
+
+            vec4 mvPosition = vec4(newpos, 1.0);
+            mvPosition = modelViewMatrix * mvPosition;
+            gl_Position = projectionMatrix * mvPosition;
+            vViewPosition = -mvPosition.xyz;
+
         }
     `,
     fragmentShader: `
@@ -165,6 +214,8 @@ function AddText() {
 })
 
 
+
+
 // =======================
 
   const initializeFont = async () => {
@@ -195,13 +246,16 @@ function AddText() {
       const properties = await initializeFont();
       setTextProperties(properties);
       setFontLoaded(true);
+      materialRef.current = properties.material; // Save material reference
     };
 
     initialize();
   }, []);
 
   return (
-    <group>
+    <group
+    ref={textRef}
+    >
       {fontLoaded && textProperties && (
         <group>
           {textProperties.meshes.map((mesh, index) => (
@@ -225,6 +279,7 @@ function AddText() {
 const TEXT = ['Christian', 'Hohenbild', 'Endrick', 'Portfolio'];
 
 function App() {
+
   return (
     <Canvas camera={{ position: [0, 0, -5], fov: 40 }}>
       <Environment files="./Environments/envmap.hdr" />

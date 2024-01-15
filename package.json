@@ -15,7 +15,8 @@
     "install": "^0.13.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "three-msdf-text-utils": "^1.1.6"
+    "three-msdf-text-utils": "^1.1.6",
+    "virtual-scroll": "^2.2.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

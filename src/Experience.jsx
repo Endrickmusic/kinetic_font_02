@@ -7,9 +7,12 @@ export default function Experience(){
 
   const normalM = useLoader(THREE.TextureLoader, "./Textures/waternormals.jpeg")
 
+  
+
+
   return (
     <>
-      <OrbitControls />       
+      {/* <OrbitControls />        */}
       <RoundedBox
           position={[1, 1, 1]}
           radius={0.01}
