@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment } from '@react-three/drei'
+import { Environment, shaderMaterial } from '@react-three/drei'
 import * as THREE from 'three'
 import { MSDFTextGeometry, MSDFTextMaterial } from 'three-msdf-text-utils'
 import { uniforms } from "three-msdf-text-utils"
@@ -11,12 +11,12 @@ import Experience from './Experience.jsx'
 import atlasURL from './font/BagossStandard-Regular.png'
 import fnt from './font/BagossStandard-Regular-msdf.json'
 
-function AddText() {
+function AddText({ planeRef }) {
   const [fontLoaded, setFontLoaded] = useState(false)
   const [textProperties, setTextProperties] = useState(null)
 
   const textRef = useRef()
-  const materialRef = useRef(null)
+  const materialRef = useRef()
 
   let position = 0
   let speed = 0
@@ -35,6 +35,7 @@ function AddText() {
   // console.log(material.uniforms.uSpeed.value)
   targetspeed += ( speed - targetspeed ) * 0.1
   materialRef.current.uniforms.uSpeed.value = targetspeed
+  planeRef.current.rotation.y = position
   })
 
   const material = new THREE.ShaderMaterial({
@@ -134,9 +135,8 @@ function AddText() {
 
             // Output
             vec3 newpos = position;
-
-            newpos = rotate(newpos, vec3(0.0, 0.0, 1.0), uSpeed);
-            // newpos = rotate(newpos, vec3(0.0, 0.0, 1.0), 0.1);
+            float xx = position.x * 0.007;
+            newpos = rotate(newpos, vec3(0.0, 0.0, 1.0), uSpeed * xx * xx * xx);
 
             vec4 mvPosition = vec4(newpos, 1.0);
             mvPosition = modelViewMatrix * mvPosition;
@@ -276,19 +276,37 @@ function AddText() {
         </group>
       )}
     </group>
-  );
+             
+  )
 }
 
 const TEXT = ['Christian', 'Hohenbild', 'Endrick', 'Portfolio'];
 
 function App() {
 
+  const planeRef = useRef()
+
   return (
     <Canvas camera={{ position: [0, 0, -5], fov: 40 }}>
       <Environment files="./Environments/envmap.hdr" />
       <color attach="background" args={['#c1efef']} />
       <Experience />
-      <AddText />
+      <AddText 
+      planeRef ={planeRef}
+      />
+      <mesh
+        ref = {planeRef}
+        position = {[ 0,1,1 ]}
+        
+        >
+          <planeGeometry 
+            args={ [1, .6] }
+            
+            />
+          <meshNormalMaterial 
+            side = {THREE.DoubleSide}
+          />
+        </mesh>  
     </Canvas>
   );
 }
