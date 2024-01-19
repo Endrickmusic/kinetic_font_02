@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, shaderMaterial } from '@react-three/drei'
+import { Environment, ContactShadows, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
-import { MSDFTextGeometry, MSDFTextMaterial } from 'three-msdf-text-utils'
+import { MSDFTextGeometry } from 'three-msdf-text-utils'
 import { uniforms } from "three-msdf-text-utils"
 import VirtualScroll from 'virtual-scroll'
 import './index.css'
@@ -136,7 +136,7 @@ function AddText({ planeRef }) {
             // Output
             vec3 newpos = position;
             float xx = position.x * 0.007;
-            newpos = rotate(newpos, vec3(0.0, 0.0, 1.0), uSpeed * xx * xx * xx);
+            newpos = rotate(newpos, vec3(0.0, 1.0, 0.0), uSpeed * xx * xx * xx);
 
             vec4 mvPosition = vec4(newpos, 1.0);
             mvPosition = modelViewMatrix * mvPosition;
@@ -268,9 +268,9 @@ function AddText({ planeRef }) {
               receiveShadow
               material={textProperties.material}
               geometry={mesh.geometry}
-              position={[1, index * 0.5, index * 0.0]} // Adjust the spacing between texts
+              position={[0, - 0.3, index * 0.5]} // Adjust the spacing between texts
               scale={0.01}
-              rotation={[Math.PI, Math.PI, 0]}
+              rotation={[1.5 * Math.PI, Math.PI, 0]}
             />
           ))}
         </group>
@@ -287,7 +287,10 @@ function App() {
   const planeRef = useRef()
 
   return (
-    <Canvas camera={{ position: [0, 0, -5], fov: 40 }}>
+    <Canvas 
+    shadows
+    camera={{ position: [0, 0, -5], fov: 40 }}>
+      <OrbitControls />
       <Environment files="./Environments/envmap.hdr" />
       <color attach="background" args={['#c1efef']} />
       <Experience />
@@ -297,16 +300,20 @@ function App() {
       <mesh
         ref = {planeRef}
         position = {[ 0,1,1 ]}
-        
+        rotation={[0.5 * Math.PI, 0.5 * Math.PI, 0 ]}
         >
           <planeGeometry 
-            args={ [1, .6] }
-            
+            args={[ 1, .6 ]}
             />
           <meshNormalMaterial 
             side = {THREE.DoubleSide}
           />
         </mesh>  
+        <ContactShadows
+        width={3}
+        height={3}
+        position={[0,-0.5,0]}
+        />
     </Canvas>
   );
 }
