@@ -297,16 +297,23 @@ function App() {
     <Canvas 
     shadows
     camera={{ position: [0, 0, -5], fov: 40 }}>
+      
       <OrbitControls />
+      
       <Environment files="./Environments/envmap.hdr" />
+      
       <color attach="background" args={['#c1efef']} />
+      
       <Experience />
+      
       <AddText 
       planeRef ={planeRef}
       />
+
+
       <mesh
         ref = {planeRef}
-        position = {[ 0,1,1 ]}
+        position = {[ 2,.8,-1 ]}
         rotation={[0.5 * Math.PI, 0.5 * Math.PI, 0 ]}
         >
           <planeGeometry 
@@ -318,10 +325,8 @@ function App() {
         </mesh>
 {/* 
       <Text 
-    
       rotation={[0.5*Math.PI, Math.PI , 0 ]}
-      position = {[ 0,0,-1 ]}
-    
+      position = {[ 0,0,-1 ]}    
       >
         hello world!
         <meshStandardMaterial
@@ -331,7 +336,7 @@ function App() {
       </Text>     */}
 
       <text
-          position={[ 1, -0.2,-1 ]}
+          position={[ 1, -0.2,-2 ]}
           rotation={[0.5*Math.PI,Math.PI,0]}
           text={TEXT2}
           maxWidth= {10}
@@ -363,11 +368,6 @@ function App() {
           <meshNormalMaterial />
         </Text3D>
 
-        <ContactShadows
-        width={3}
-        height={3}
-        position={[0,-0.5,0]}
-        />
     </Canvas>
   );
 }
