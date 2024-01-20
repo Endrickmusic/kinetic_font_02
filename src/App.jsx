@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { extend, Canvas, useFrame } from '@react-three/fiber'
 import { Environment, ContactShadows, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
 import { MSDFTextGeometry } from 'three-msdf-text-utils'
@@ -7,9 +7,12 @@ import { uniforms } from "three-msdf-text-utils"
 import VirtualScroll from 'virtual-scroll'
 import './index.css'
 import Experience from './Experience.jsx'
+import { Text } from 'troika-three-text'
 
 import atlasURL from './font/BagossStandard-Regular.png'
 import fnt from './font/BagossStandard-Regular-msdf.json'
+
+extend({ Text });
 
 function AddText({ planeRef }) {
   const [fontLoaded, setFontLoaded] = useState(false)
@@ -46,11 +49,14 @@ function AddText({ planeRef }) {
     },
     extensions: {
         derivatives: true,
+        fragDepth: true, // Enable fragDepth extension for shadows
+        drawBuffers: true,
+        shaderTextureLOD: true,
     },
     uniforms: {
 
         uSpeed : { value: 0 },
-
+        ambientLightColor: { value: new THREE.Color(0xffffff) },
         // Common
         ...uniforms.common,
         
@@ -222,33 +228,33 @@ function AddText({ planeRef }) {
 // =======================
 
   const initializeFont = async () => {
-    const [atlas] = await Promise.all([loadFontAtlas(atlasURL)]);
-    material.uniforms.uMap.value = atlas;
+    const [atlas] = await Promise.all([loadFontAtlas(atlasURL)])
+    material.uniforms.uMap.value = atlas
 
     const meshes = TEXT.map((text) => {
       const geometry = new MSDFTextGeometry({
         text: text,
         font: fnt,
-      });
-      const mesh = new THREE.Mesh(geometry, material);
-      return mesh;
-    });
+      })
+      const mesh = new THREE.Mesh(geometry, material)
+      return mesh
+    })
 
     return { meshes, material };
-  };
+  }
 
   const loadFontAtlas = (path) => {
     return new Promise((resolve) => {
-      const loader = new THREE.TextureLoader();
-      loader.load(path, resolve);
-    });
-  };
+      const loader = new THREE.TextureLoader()
+      loader.load(path, resolve)
+    })
+  }
 
   useEffect(() => {
     const initialize = async () => {
-      const properties = await initializeFont();
-      setTextProperties(properties);
-      setFontLoaded(true);
+      const properties = await initializeFont()
+      setTextProperties(properties)
+      setFontLoaded(true)
       materialRef.current = properties.material; // Save material reference
     };
 
@@ -280,11 +286,12 @@ function AddText({ planeRef }) {
   )
 }
 
-const TEXT = ['Christian', 'Hohenbild', 'Endrick', 'Portfolio'];
+const TEXT = ['Christian', 'Hohenbild', 'Endrick', 'Portfolio']
 
 function App() {
 
   const planeRef = useRef()
+  const TEXT2 = ['Christian', 'Hohenbild', 'Endrick', 'Portfolio']
 
   return (
     <Canvas 
@@ -308,7 +315,39 @@ function App() {
           <meshNormalMaterial 
             side = {THREE.DoubleSide}
           />
-        </mesh>  
+        </mesh>
+{/* 
+      <Text 
+    
+      rotation={[0.5*Math.PI, Math.PI , 0 ]}
+      position = {[ 0,0,-1 ]}
+    
+      >
+        hello world!
+        <meshStandardMaterial
+        castShadow
+        color={"red"}
+        />
+      </Text>     */}
+
+      <text
+          position={[ 1, -0.2,-1 ]}
+          rotation={[0.5*Math.PI,Math.PI,0]}
+          text={TEXT2}
+          maxWidth= {10}
+          // fontSize={12}
+          scale={2.0}
+        >
+         
+          <meshPhongMaterial 
+          attach="material" 
+          color={"black"} 
+          side={THREE.DoubleSide}
+          />
+         
+        </text>
+
+
         <ContactShadows
         width={3}
         height={3}
