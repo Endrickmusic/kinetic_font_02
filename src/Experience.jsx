@@ -14,8 +14,9 @@ export default function Experience(){
     <>
       {/* <OrbitControls />        */}
       <RoundedBox
-          position={[1, 1, 1]}
+          position={[1, 0.2, 1]}
           radius={0.01}
+          castShadow
           >
           <meshStandardMaterial 
             metalness={1}

@@ -1,18 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { extend, Canvas, useFrame } from '@react-three/fiber'
-import { Environment, ContactShadows, OrbitControls, Text3D } from '@react-three/drei'
+import { Environment, ContactShadows, OrbitControls, Text3D, Text } from '@react-three/drei'
 import * as THREE from 'three'
 import { MSDFTextGeometry } from 'three-msdf-text-utils'
 import { uniforms } from "three-msdf-text-utils"
 import VirtualScroll from 'virtual-scroll'
 import './index.css'
 import Experience from './Experience.jsx'
-import { Text } from 'troika-three-text'
+// import { Text } from 'troika-three-text'
 
 import atlasURL from './font/BagossStandard-Regular.png'
 import fnt from './font/BagossStandard-Regular-msdf.json'
 
-extend({ Text });
+// extend({ Text });
 
 function AddText({ planeRef }) {
   const [fontLoaded, setFontLoaded] = useState(false)
@@ -142,7 +142,7 @@ function AddText({ planeRef }) {
             // Output
             vec3 newpos = position;
             float xx = position.x * 0.007;
-            newpos = rotate(newpos, vec3(0.0, 1.0, 0.0), uSpeed * xx * xx * xx);
+            newpos = rotate(newpos, vec3(0.0, 1.0, 1.0), uSpeed * xx * xx * xx);
 
             vec4 mvPosition = vec4(newpos, 1.0);
             mvPosition = modelViewMatrix * mvPosition;
@@ -224,6 +224,7 @@ function AddText({ planeRef }) {
 
 
 
+const TEXT = ['Christian', 'Hohenbild', 'Endrick', 'Portfolio']
 
 // =======================
 
@@ -286,12 +287,25 @@ function AddText({ planeRef }) {
   )
 }
 
-const TEXT = ['Christian', 'Hohenbild', 'Endrick', 'Portfolio']
+
+function Floor() {
+  return (
+      <mesh 
+      position = {[0, -1,0]}
+      rotation-x={-Math.PI / 2} receiveShadow>
+          <circleGeometry args={[10]} />
+          <meshStandardMaterial 
+          color={'white'}
+          />
+      </mesh>
+  )
+}
+
 
 function App() {
 
   const planeRef = useRef()
-  const TEXT2 = ['Christian', 'Hohenbild', 'Endrick', 'Portfolio']
+  const TEXT2 = ['Christian ', 'Hohenbild ', 'Endrick ', 'Portfolio ']
 
   return (
     <Canvas 
@@ -300,10 +314,16 @@ function App() {
       
       <OrbitControls />
       
-      <Environment files="./Environments/envmap.hdr" />
+      {/* <Environment files="./Environments/envmap.hdr" /> */}
       
       <color attach="background" args={['#c1efef']} />
       
+      <directionalLight 
+      castShadow
+      />
+
+      <Floor />
+
       <Experience />
       
       <AddText 
@@ -312,31 +332,35 @@ function App() {
 
 
       <mesh
+        castShadow
         ref = {planeRef}
-        position = {[ 2,.8,-1 ]}
+        position = {[ 2,.2,-1 ]}
         rotation={[0.5 * Math.PI, 0.5 * Math.PI, 0 ]}
         >
           <planeGeometry 
             args={[ 1, .6 ]}
             />
           <meshNormalMaterial 
+            castShadow
             side = {THREE.DoubleSide}
           />
         </mesh>
-{/* 
+
       <Text 
+      castShadow
       rotation={[0.5*Math.PI, Math.PI , 0 ]}
-      position = {[ 0,0,-1 ]}    
+      position = {[ 0,0,-2.5 ]}    
       >
         hello world!
         <meshStandardMaterial
         castShadow
         color={"red"}
         />
-      </Text>     */}
+      </Text>    
 
-      <text
-          position={[ 1, -0.2,-2 ]}
+      {/* <text
+          castShadow
+          position={[ 1, -.8,-2 ]}
           rotation={[0.5*Math.PI,Math.PI,0]}
           text={TEXT2}
           maxWidth= {10}
@@ -350,9 +374,10 @@ function App() {
           side={THREE.DoubleSide}
           />
          
-        </text>
+        </text> */}
         
         <Text3D
+          castShadow
           position={[ 1, -0.2,-1 ]}
           rotation={[0.5*Math.PI,Math.PI,0]}
           curveSegments={5}
