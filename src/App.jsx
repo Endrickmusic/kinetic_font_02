@@ -7,6 +7,7 @@ import { uniforms } from "three-msdf-text-utils"
 import VirtualScroll from 'virtual-scroll'
 import './index.css'
 import Experience from './Experience.jsx'
+import ShaderText from './ShaderText.jsx'
 // import { Text } from 'troika-three-text'
 
 import atlasURL from './font/BagossStandard-Regular.png'
@@ -353,19 +354,7 @@ function App() {
             castShadow
             side = {THREE.DoubleSide}
           />
-        </mesh>
-
-      <Text 
-      castShadow
-      rotation={[0.5*Math.PI, Math.PI , 0 ]}
-      position = {[ 0,0,-2.5 ]}    
-      >
-        hello world!
-        <meshStandardMaterial
-        castShadow
-        color={"red"}
-        />
-      </Text>    
+        </mesh> 
 
       {/* <text
           castShadow
@@ -401,6 +390,8 @@ function App() {
           {`hello\nworld`}
           <meshNormalMaterial />
         </Text3D>
+
+        <ShaderText />
 
     </Canvas>
   );
