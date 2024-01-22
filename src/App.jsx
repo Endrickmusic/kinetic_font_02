@@ -3,13 +3,10 @@ import { extend, Canvas, useFrame } from '@react-three/fiber'
 import { Environment, ContactShadows, OrbitControls, Text3D, Text, SoftShadows } from '@react-three/drei'
 import * as THREE from 'three'
 
+
 import './index.css'
 import Experience from './Experience.jsx'
 import ShaderText from './ShaderText.jsx'
-// import { Text } from 'troika-three-text'
-
-
-// extend({ Text });
 
 
 function Floor() {
@@ -58,25 +55,6 @@ function App() {
       <Floor />
 
       <Experience />
-    
-
-      {/* <text
-          castShadow
-          position={[ 1, -.8,-2 ]}
-          rotation={[0.5*Math.PI,Math.PI,0]}
-          text={TEXT2}
-          maxWidth= {10}
-          // fontSize={12}
-          scale={2.0}
-        >
-         
-          <meshPhongMaterial 
-          attach="material" 
-          color={"black"} 
-          side={THREE.DoubleSide}
-          />
-         
-        </text> */}
 
         <ShaderText />
 
