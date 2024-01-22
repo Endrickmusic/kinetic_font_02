@@ -37,12 +37,12 @@ function App() {
     camera={{ position: [0, 0, -5], fov: 40 }}>
       
       <OrbitControls />
-      <SoftShadows 
+      {/* <SoftShadows 
       size= {20}
       focus= {1}
       samples= {20}
 
-      />
+      /> */}
       {/* <Environment files="./Environments/envmap.hdr" /> */}
       
       <color attach="background" args={['#c1efef']} />
