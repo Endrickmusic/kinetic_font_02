@@ -10,7 +10,7 @@ import './index.css'
 import atlasURL from './font/BagossStandard-Regular.png'
 import fnt from './font/BagossStandard-Regular-msdf.json'
 
-export default function AddText({ planeRef }) {
+export default function AddText() {
   const [fontLoaded, setFontLoaded] = useState(false)
   const [textProperties, setTextProperties] = useState(null)
 
@@ -31,10 +31,8 @@ export default function AddText({ planeRef }) {
   useFrame((state, delta) => {
   textRef.current.position.y = -position
   speed *= 0.9
-  // console.log(material.uniforms.uSpeed.value)
   targetspeed += ( speed - targetspeed ) * 0.1
   materialRef.current.uniforms.uSpeed.value = targetspeed
-  planeRef.current.rotation.y = position
   })
 
   const material = new THREE.ShaderMaterial({

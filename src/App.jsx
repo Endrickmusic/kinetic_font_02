@@ -6,10 +6,10 @@ import * as THREE from 'three'
 
 import './index.css'
 
-import Experience from './Experience.jsx'
 import ShaderText from './ShaderText.jsx'
 import AddText from './AddText.jsx'
 import AddFloor from './AddFloor.jsx'
+import TextIn3D from './TextIn3D.jsx'
 
 // extend({ Text });
 
@@ -24,86 +24,33 @@ function App() {
     shadows
     camera={{ position: [0, 0, -5], fov: 40 }}>
       
-      <OrbitControls />
-      <SoftShadows 
+    <OrbitControls />
+    <SoftShadows 
       size= {20}
       focus= {1}
       samples= {20}
 
       />
-      {/* <Environment files="./Environments/envmap.hdr" /> */}
+    {/* <Environment files="./Environments/envmap.hdr" /> */}
       
-      <color attach="background" args={['#c1efef']} />
+    <color attach="background" args={['#c1efef']} />
       
-      <directionalLight 
+    <directionalLight 
       castShadow
       shadows={{ type: THREE.PCFSoftShadowMap }}
       shadow-mapSize={1024}
       position={[0,2,0]}
       />
 
-      <AddFloor />
-
-      <Experience />
+    <AddFloor />
       
-      <AddText 
-      planeRef ={planeRef}
-      />
+    <AddText />
 
+    <TextIn3D />
 
-      <mesh
-        castShadow
-        ref = {planeRef}
-        position = {[ 2,.2,-1 ]}
-        rotation={[0.5 * Math.PI, 0.5 * Math.PI, 0 ]}
-        >
-          <planeGeometry 
-            args={[ 1, .6 ]}
-            />
-          <meshNormalMaterial 
-            castShadow
-            side = {THREE.DoubleSide}
-          />
-        </mesh> 
+    <ShaderText />
 
-      {/* <text
-          castShadow
-          position={[ 1, -.8,-2 ]}
-          rotation={[0.5*Math.PI,Math.PI,0]}
-          text={TEXT2}
-          maxWidth= {10}
-          // fontSize={12}
-          scale={2.0}
-        >
-         
-          <meshPhongMaterial 
-          attach="material" 
-          color={"black"} 
-          side={THREE.DoubleSide}
-          />
-         
-        </text> */}
-        
-        <Text3D
-          castShadow
-          position={[ 1, -0.2,-1 ]}
-          rotation={[0.5*Math.PI,Math.PI,0]}
-          curveSegments={5}
-          bevelEnabled
-          bevelSize={0.004}
-          bevelThickness={0.0001}
-          height={0.001}
-          lineHeight={0.5}
-          letterSpacing={-0.06}
-          size={0.5}
-          font="/Inter_Bold.json">
-          {`hello\nworld`}
-          <meshNormalMaterial />
-        </Text3D>
-
-        <ShaderText />
-
-    </Canvas>
+  </Canvas>
   );
 }
 
