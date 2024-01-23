@@ -1,8 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
-import { extend, Canvas, useFrame } from '@react-three/fiber'
-import { Environment, ContactShadows, OrbitControls, Text3D, Text, SoftShadows } from '@react-three/drei'
-import * as THREE from 'three'
-// import { Text } from 'troika-three-text'
+import { Canvas } from '@react-three/fiber'
+import { Environment, OrbitControls, SoftShadows } from '@react-three/drei'
 
 import './index.css'
 
@@ -10,19 +7,22 @@ import ShaderText from './ShaderText.jsx'
 import AddText from './AddText.jsx'
 import AddFloor from './AddFloor.jsx'
 import TextIn3D from './TextIn3D.jsx'
+import TroikaText from './TroikaText.jsx'
 
-// extend({ Text });
+
 
 
 function App() {
 
-  const planeRef = useRef()
-  const TEXT2 = ['Christian ', 'Hohenbild ', 'Endrick ', 'Portfolio ']
-
   return (
     <Canvas 
     shadows
-    camera={{ position: [0, 0, -5], fov: 40 }}>
+    camera={{ 
+    position: [0, 0, -5], 
+    rotation: [0, 0, 0],
+    fov: 40 }}
+    
+    >
       
     <OrbitControls />
     <SoftShadows 
@@ -37,7 +37,6 @@ function App() {
       
     <directionalLight 
       castShadow
-      shadows={{ type: THREE.PCFSoftShadowMap }}
       shadow-mapSize={1024}
       position={[0,2,0]}
       />
@@ -49,6 +48,8 @@ function App() {
     <TextIn3D />
 
     <ShaderText />
+
+    <TroikaText />
 
   </Canvas>
   );
