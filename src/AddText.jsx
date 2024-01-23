@@ -4,7 +4,9 @@ import * as THREE from 'three'
 import { MSDFTextGeometry } from 'three-msdf-text-utils'
 import { uniforms } from "three-msdf-text-utils"
 import VirtualScroll from 'virtual-scroll'
+
 import './index.css'
+
 import atlasURL from './font/BagossStandard-Regular.png'
 import fnt from './font/BagossStandard-Regular-msdf.json'
 
