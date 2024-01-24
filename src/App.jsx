@@ -1,14 +1,18 @@
 import { useRef } from "react"
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Environment, OrbitControls, SoftShadows } from '@react-three/drei'
+// import { useControls, Leva } from 'leva'
 
 import './index.css'
 
-import ShaderText from './ShaderText.jsx'
+// import ShaderText from './ShaderText.jsx'
 import AddText from './AddText.jsx'
 import AddFloor from './AddFloor.jsx'
-import TextIn3D from './TextIn3D.jsx'
+// import TextIn3D from './TextIn3D.jsx'
 import TroikaText from './TroikaText.jsx'
+
+
+
 
 function LightAnimation(){
 
@@ -18,7 +22,6 @@ function LightAnimation(){
     const rotSpeed = .05
     lightRef.current.position.x += Math.sin(state.clock.getElapsedTime()) * rotSpeed
     lightRef.current.position.z += Math.cos(state.clock.getElapsedTime()) * rotSpeed
-    console.log(lightRef.current.position.x)
   })  
   return(
 
@@ -34,7 +37,14 @@ function LightAnimation(){
 
 function App() {
 
+  // const options = useControls('What is this', {
+  //   parameter1 : { value: 0.5, min: 0.01, max: 1.0, step: 0.01 },
+  //   parameter2 : { value: 0.5, min: 0.01, max: 1.0, step: 0.01 }
+  // })
+
   return (
+  <>
+    {/* <Leva /> */}
     <Canvas 
     shadows
     camera={{ 
@@ -48,25 +58,26 @@ function App() {
       size= {10}
       focus= {1}
       samples= {20}
-      />
-    {/* <Environment files="./Environments/envmap.hdr" /> */}
+      /> 
+    {/* <Environment files="./Environments/envmap.hdr" />*/}
       
     <color attach="background" args={['#c1efef']} />
       
-    <LightAnimation />
+    // <LightAnimation />
 
     <AddFloor />
       
     <AddText />
 
-    <TextIn3D />
+    {/* <TextIn3D /> */}
 
-    <ShaderText />
+    {/* <ShaderText /> */}
 
     <TroikaText />
 
   </Canvas>
-  );
+  </>
+  )
 }
 
 export default App;
