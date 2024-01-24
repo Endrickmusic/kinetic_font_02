@@ -1,3 +1,4 @@
+import { DoubleSide } from 'three'
 
 export default function Floor() {
     return (
@@ -7,6 +8,7 @@ export default function Floor() {
             <circleGeometry args={[10]} />
             <meshStandardMaterial 
             color={'white'}
+            side={DoubleSide}
             />
         </mesh>
     )

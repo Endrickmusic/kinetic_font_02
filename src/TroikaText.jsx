@@ -11,7 +11,7 @@ export default function (){
 return (
     <text
           castShadow
-          position={[ 1, -.8,-2 ]}
+          position={[ 1, -.9,-4 ]}
           rotation={[0.5*Math.PI,Math.PI,0]}
           text={TEXT2}
           maxWidth= {10}
