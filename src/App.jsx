@@ -1,7 +1,7 @@
 import { useRef } from "react"
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Environment, OrbitControls, SoftShadows } from '@react-three/drei'
-// import { useControls, Leva } from 'leva'
+import { useControls, Leva } from 'leva'
 
 import './index.css'
 
@@ -37,14 +37,14 @@ function LightAnimation(){
 
 function App() {
 
-  // const options = useControls('What is this', {
-  //   parameter1 : { value: 0.5, min: 0.01, max: 1.0, step: 0.01 },
-  //   parameter2 : { value: 0.5, min: 0.01, max: 1.0, step: 0.01 }
-  // })
+  const config = useControls('What is this', {
+    parameter1 : '#c1efef',
+    parameter2 : { value: 0.5, min: 0.01, max: 1.0, step: 0.01 }
+  })
 
   return (
   <>
-    {/* <Leva /> */}
+    <Leva collapsed/>
     <Canvas 
     shadows
     camera={{ 
@@ -61,7 +61,7 @@ function App() {
       /> 
     {/* <Environment files="./Environments/envmap.hdr" />*/}
       
-    <color attach="background" args={['#c1efef']} />
+    <color attach="background" args={[config.parameter1]} />
       
     // <LightAnimation />
 
