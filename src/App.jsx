@@ -43,7 +43,8 @@ function App() {
     lightIntensity : { value: 1, min: 0.0001, max: 14, step: 0.00001 },
     softShadowSize : { value: 25, min: 0.0, max: 100.0, step: 1.0 },
     softShadowSamples : { value: 10, min: 1, max: 20, step: 1 },
-    softShadowFocus : { value: 0, min: 0, max: 2, step: 0.01 }
+    softShadowFocus : { value: 0, min: 0, max: 2, step: 0.01 },
+    floorSize : { value: 10, min: 1, max: 20, step: 1 }
   })
 
   return (
@@ -69,7 +70,7 @@ function App() {
       
     // <LightAnimation config={config}/>
 
-    <AddFloor />
+    <AddFloor config={config}/>
       
     <AddText />
 
