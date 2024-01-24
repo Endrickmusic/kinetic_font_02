@@ -10,6 +10,7 @@ import AddText from './AddText.jsx'
 import AddFloor from './AddFloor.jsx'
 import TextIn3D from './TextIn3D.jsx'
 import TroikaText from './TroikaText.jsx'
+import Ground from './Ground.jsx'
 
 function LightAnimation({config}){
 
@@ -17,8 +18,8 @@ function LightAnimation({config}){
 
   useFrame((state, delta) => {
     const rotSpeed = .05
-    lightRef.current.position.x += Math.sin(state.clock.getElapsedTime()) * rotSpeed
-    lightRef.current.position.z += Math.cos(state.clock.getElapsedTime()) * rotSpeed
+    lightRef.current.position.x += Math.sin(state.clock.getElapsedTime()) * config.rotSpeed
+    lightRef.current.position.z += Math.cos(state.clock.getElapsedTime()) * config.rotSpeed
   })  
   return(
 
@@ -44,9 +45,7 @@ const cameraControlsRef = useRef()
     softShadowSamples : { value: 10, min: 1, max: 20, step: 1 },
     softShadowFocus : { value: 0, min: 0, max: 2, step: 0.01 },
     floorSize : { value: 10, min: 1, max: 20, step: 1 },
-    camRotX : { value: 0, min: 0, max: 2*Math.PI, step: 0.1 },
-    camRotY : { value: 0, min: 0, max: 2*Math.PI, step: 0.1 },
-    camRotZ : { value: 0, min: 0, max: 2*Math.PI, step: 0.1 },
+    rotSpeed : { value: 0, min: 0, max: 10, step: 0.1 },
 
     thetaGrp: buttonGroup({
       label: 'rotate theta',
@@ -94,8 +93,10 @@ const cameraControlsRef = useRef()
       
     <LightAnimation config={config}/>
 
-    <AddFloor config={config}/>
+    {/* <AddFloor config={config}/> */}
       
+    <Ground />
+
     <AddText />
 
     <TextIn3D />

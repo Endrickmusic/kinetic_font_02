@@ -29,9 +29,9 @@ export default function AddText() {
   })
 
   useFrame((state, delta) => {
-  textRef.current.position.y = -position
+  // textRef.current.position.y = -position
   speed *= 0.9
-  targetspeed += ( speed - targetspeed ) * 0.1
+  targetspeed += ( speed - targetspeed ) * 0.01
   materialRef.current.uniforms.uSpeed.value = targetspeed
   })
 
