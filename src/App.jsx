@@ -5,16 +5,16 @@ import { useControls, Leva } from 'leva'
 
 import './index.css'
 
-// import ShaderText from './ShaderText.jsx'
+import ShaderText from './ShaderText.jsx'
 import AddText from './AddText.jsx'
 import AddFloor from './AddFloor.jsx'
-// import TextIn3D from './TextIn3D.jsx'
+import TextIn3D from './TextIn3D.jsx'
 import TroikaText from './TroikaText.jsx'
 
 
 
 
-function LightAnimation(){
+function LightAnimation({config}){
 
   const lightRef =  useRef()
 
@@ -30,6 +30,7 @@ function LightAnimation(){
     castShadow
     shadow-mapSize={1024}
     position={[0,5.0,0]}
+    intensity={[config.lightIntensity]}
     />
   )
 }
@@ -38,13 +39,16 @@ function LightAnimation(){
 function App() {
 
   const config = useControls('What is this', {
-    parameter1 : '#c1efef',
-    parameter2 : { value: 0.5, min: 0.01, max: 1.0, step: 0.01 }
+    backgroundColor : '#c1efef',
+    lightIntensity : { value: 1, min: 0.0001, max: 14, step: 0.00001 },
+    softShadowSize : { value: 25, min: 0.0, max: 100.0, step: 1.0 },
+    softShadowSamples : { value: 10, min: 1, max: 20, step: 1 },
+    softShadowFocus : { value: 0, min: 0, max: 2, step: 0.01 }
   })
 
   return (
   <>
-    <Leva collapsed/>
+    <Leva />
     <Canvas 
     shadows
     camera={{ 
@@ -55,23 +59,23 @@ function App() {
       
     <OrbitControls />
     <SoftShadows 
-      size= {10}
-      focus= {1}
-      samples= {20}
+      size= {config.softShadowSize}
+      focus= {config.softShadowFocus}
+      samples= {config.softShadowSamples}
       /> 
     {/* <Environment files="./Environments/envmap.hdr" />*/}
       
-    <color attach="background" args={[config.parameter1]} />
+    <color attach="background" args={[config.backgroundColor]} />
       
-    // <LightAnimation />
+    // <LightAnimation config={config}/>
 
     <AddFloor />
       
     <AddText />
 
-    {/* <TextIn3D /> */}
+    <TextIn3D />
 
-    {/* <ShaderText /> */}
+    <ShaderText />
 
     <TroikaText />
 
