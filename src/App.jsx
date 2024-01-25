@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { Environment, CameraControls, SoftShadows } from '@react-three/drei'
 import { useControls, Leva, buttonGroup, button } from 'leva'
 import { MathUtils } from 'three'
@@ -80,13 +80,7 @@ const cameraControlsRef = useRef()
       
     {/* <Ground /> */}
 
-    <AddText />
-
-    <TextIn3D />
-
     <ShaderText />
-
-    <TroikaText />
 
   </Canvas>
   </>

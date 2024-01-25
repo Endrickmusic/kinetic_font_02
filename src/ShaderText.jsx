@@ -1,9 +1,8 @@
-import React from "react";
-import { Text, useEnvironment } from "@react-three/drei";
+import React from 'react'
+import { Text, useEnvironment } from '@react-three/drei'
 import { useLoader, useFrame } from '@react-three/fiber'
-// import { TextureLoader } from '/node_modules/three/src/loaders/TextureLoader'
-import { DoubleSide, MeshDepthMaterial, RGBADepthPacking, TextureLoader } from "three"
-import { useRef } from "react"
+import { DoubleSide, MeshDepthMaterial, RGBADepthPacking, TextureLoader } from 'three'
+import { useRef } from 'react'
 
 
 export default function Model(props) {
@@ -109,5 +108,5 @@ export default function Model(props) {
         </Text>   
       
     </group>
-  );
+  )
 }
