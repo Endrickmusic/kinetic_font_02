@@ -2,6 +2,7 @@ import { useRef } from "react"
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Environment, CameraControls, SoftShadows } from '@react-three/drei'
 import { useControls, Leva, buttonGroup, button } from 'leva'
+import { MathUtils } from 'three'
 
 import './index.css'
 
@@ -11,6 +12,8 @@ import AddFloor from './AddFloor.jsx'
 import TextIn3D from './TextIn3D.jsx'
 import TroikaText from './TroikaText.jsx'
 import Ground from './Ground.jsx'
+
+const { DEG2RAD } = MathUtils
 
 function LightAnimation({config}){
 
