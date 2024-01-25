@@ -1,10 +1,12 @@
 import { Reflector, useTexture } from '@react-three/drei'
+import { DoubleSide } from 'three'
 
 
 export default function Ground() {
     const [floor, normal] = useTexture(['/Textures/SurfaceImperfections003_1K_var1.jpg', '/Textures/SurfaceImperfections003_1K_Normal.jpg'])
     return (
       <Reflector 
+        side={ DoubleSide }
         position={[0, -2, 0]}
         blur={[400, 100]} 
         resolution={512} 

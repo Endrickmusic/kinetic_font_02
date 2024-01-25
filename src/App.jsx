@@ -11,44 +11,25 @@ import AddText from './AddText.jsx'
 import AddFloor from './AddFloor.jsx'
 import TextIn3D from './TextIn3D.jsx'
 import TroikaText from './TroikaText.jsx'
+// import LightAnimation from './SpotLightAnimation.jsx'
+import LightAnimation from './DirLightAnimation.jsx'
 import Ground from './Ground.jsx'
 
 const { DEG2RAD } = MathUtils
-
-function LightAnimation({config}){
-
-  const lightRef =  useRef()
-
-  useFrame((state, delta) => {
-    const rotSpeed = .05
-    lightRef.current.position.x += Math.sin(state.clock.getElapsedTime()) * config.rotSpeed
-    lightRef.current.position.z += Math.cos(state.clock.getElapsedTime()) * config.rotSpeed
-  })  
-  return(
-
-    <directionalLight 
-    ref={lightRef}
-    castShadow
-    shadow-mapSize={1024}
-    position={[0,5.0,0]}
-    intensity={[config.lightIntensity]}
-    />
-  )
-}
-
 
 function App() {
 
 const cameraControlsRef = useRef()
 
   const config = useControls('What is this', {
-    backgroundColor : '#c1efef',
+    backgroundColor : '#000000',
     lightIntensity : { value: 1, min: 0.0001, max: 14, step: 0.00001 },
     softShadowSize : { value: 25, min: 0.0, max: 100.0, step: 1.0 },
     softShadowSamples : { value: 10, min: 1, max: 20, step: 1 },
     softShadowFocus : { value: 0, min: 0, max: 2, step: 0.01 },
-    floorSize : { value: 10, min: 1, max: 20, step: 1 },
-    rotSpeed : { value: 0, min: 0, max: 10, step: 0.1 },
+    floorSizeX : { value: 10, min: 1, max: 20, step: 1 },
+    floorSizeY : { value: 10, min: 1, max: 20, step: 1 },
+    rotSpeed : { value: 1, min: 0, max: 10, step: 0.1 },
 
     thetaGrp: buttonGroup({
       label: 'rotate theta',
@@ -76,8 +57,7 @@ const cameraControlsRef = useRef()
     <Canvas 
     shadows
     camera={{ 
-     
-
+    position: [0,5,0],
     fov: 40 }}    
     >
       
@@ -96,9 +76,9 @@ const cameraControlsRef = useRef()
       
     <LightAnimation config={config}/>
 
-    {/* <AddFloor config={config}/> */}
+    <AddFloor config={config}/>
       
-    <Ground />
+    {/* <Ground /> */}
 
     <AddText />
 
