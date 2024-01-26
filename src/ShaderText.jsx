@@ -15,8 +15,6 @@ export default function Model(props) {
 
     useFrame((state, delta) => {
       customUniforms.uTime.value += 0.01
-      // planeRef.current.rotation.x = planeRef.current.rotation.y += delta / 12
-
     })
 
     const onBeforeCompile = (shader) => 
@@ -79,18 +77,18 @@ export default function Model(props) {
     const normalTexture = useLoader(TextureLoader, './Textures/waternormals.jpeg')
     const envMap = useEnvironment({files : './Environments/envmap.hdr'})
 
-
-
   return (
     <group>
      
      <Text 
       castShadow
       ref={planeRef}
-      rotation={[0.5*Math.PI, Math.PI , 0 ]}
-      position = {[ 0,0,-2.5 ]}    
+      rotation={[1.5*Math.PI, 0 , 0 ]}
+      position = {[ 0,0,0 ]}    
+      maxWidth={7}
+      fontSize={0.4}
       >
-        hello world!
+        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
       
       
         <meshStandardMaterial 

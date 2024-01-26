@@ -1,8 +1,8 @@
-import { useRef } from "react"
-import { Canvas } from '@react-three/fiber'
+import { useRef, useEffect } from "react"
+import { Canvas, useThree } from '@react-three/fiber'
 import { Environment, CameraControls, SoftShadows } from '@react-three/drei'
 import { useControls, Leva, buttonGroup, button } from 'leva'
-import { MathUtils } from 'three'
+import { MathUtils, Vector3 } from 'three'
 
 import './index.css'
 
@@ -15,7 +15,9 @@ import TroikaText from './TroikaText.jsx'
 import LightAnimation from './DirLightAnimation.jsx'
 import Ground from './Ground.jsx'
 
+
 const { DEG2RAD } = MathUtils
+
 
 function App() {
 
@@ -29,7 +31,7 @@ const cameraControlsRef = useRef()
     softShadowFocus : { value: 0, min: 0, max: 2, step: 0.01 },
     floorSizeX : { value: 10, min: 1, max: 20, step: 1 },
     floorSizeY : { value: 10, min: 1, max: 20, step: 1 },
-    rotSpeed : { value: 1, min: 0, max: 10, step: 0.1 },
+    rotSpeed : { value: 0.1, min: 0, max: 10, step: 0.05 },
 
     thetaGrp: buttonGroup({
       label: 'rotate theta',
@@ -57,9 +59,10 @@ const cameraControlsRef = useRef()
     <Canvas 
     shadows
     camera={{ 
-    position: [0,5,0],
+    position: [0,10,0],
     fov: 40 }}    
     >
+
       
     <CameraControls 
       ref={cameraControlsRef}
