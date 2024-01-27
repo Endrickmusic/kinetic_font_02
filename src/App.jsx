@@ -1,20 +1,13 @@
 import { useRef } from "react"
-import { Canvas, useThree } from '@react-three/fiber'
-import { CameraControls, SoftShadows } from '@react-three/drei'
+import { Canvas, useThree, useFrame } from '@react-three/fiber'
+import { SoftShadows } from '@react-three/drei'
 import { useControls, Leva, } from 'leva'
 import { Vector3 } from 'three'
 
 import './index.css'
 
 import ShaderText from './ShaderText.jsx'
-import AddText from './AddText.jsx'
 import AddFloor from './AddFloorSimple.jsx'
-import TextIn3D from './TextIn3D.jsx'
-import TroikaText from './TroikaText.jsx'
-// import LightAnimation from './SpotLightAnimation.jsx'
-import LightAnimation from './DirLightAnimation.jsx'
-import Ground from './Ground.jsx'
-
 
 
 function App() {
@@ -24,7 +17,7 @@ function App() {
     const vec = new Vector3()
   
     return useFrame(() => {
-      camera.lookAt(0, 0, 0)
+      camera.lookAt(0, -1, 0)
     })
   }
 
@@ -46,13 +39,11 @@ const cameraControlsRef = useRef()
     <Canvas 
     shadows
     camera={{ 
-    position: [6,3,5],
+    position: [4.5, 2.5,5.5],
     fov: 40 }}    
     >
-      
-    <CameraControls 
-      ref={cameraControlsRef}
-    />
+
+    <Rig />
 
     <SoftShadows 
       size= {config.softShadowSize}
