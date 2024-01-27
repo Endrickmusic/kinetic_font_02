@@ -10,8 +10,8 @@ export default function LightAnimation({config}){
   
     useFrame((state, delta) => {
       const rotSpeed = .05
-      lightRef.current.position.x = Math.sin(state.clock.getElapsedTime()) * config.rotSpeed
-      lightRef.current.position.z = Math.cos(state.clock.getElapsedTime()) * config.rotSpeed
+      // lightRef.current.position.x = Math.sin(state.clock.getElapsedTime()) * config.rotSpeed
+      // lightRef.current.position.z = Math.cos(state.clock.getElapsedTime()) * config.rotSpeed
       // state.camera.rotation.z = -180 * DEG2RAD
     })  
     return(

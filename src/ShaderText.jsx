@@ -1,11 +1,11 @@
 import React from 'react'
-import { Text, useEnvironment } from '@react-three/drei'
-import { useLoader, useFrame } from '@react-three/fiber'
-import { DoubleSide, MeshDepthMaterial, RGBADepthPacking, TextureLoader } from 'three'
+import { Text } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber'
+import { DoubleSide, MeshDepthMaterial, RGBADepthPacking } from 'three'
 import { useRef } from 'react'
 
 
-export default function Model(props) {
+export default function Model() {
 
   const planeRef = useRef()
 
@@ -73,10 +73,6 @@ export default function Model(props) {
      )
     }
 
-
-    const normalTexture = useLoader(TextureLoader, './Textures/waternormals.jpeg')
-    const envMap = useEnvironment({files : './Environments/envmap.hdr'})
-
   return (
     <group>
      
@@ -88,17 +84,15 @@ export default function Model(props) {
       maxWidth={7}
       fontSize={0.4}
       >
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
+        Lorem ipsum dolor sit amet, con- sectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore   eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril dele-   nit augue duis dolore
       
       
         <meshStandardMaterial 
         onBeforeCompile = { onBeforeCompile }
-        color = { 0xf4c400 }
-        envMap = { envMap }
-        normalMap = { normalTexture }
+        color = { 0x0022dd }
         normalScale = { [0.07, 0.07] }
-        roughness = { 0.16 }
-        metalness = { 1 }
+        roughness = { 0.0 }
+        metalness = { 0 }
         side = { DoubleSide }
         customDepthMaterial = { depthMaterial }
         />
