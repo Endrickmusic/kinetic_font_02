@@ -1,5 +1,4 @@
 import { DoubleSide } from 'three'
-import { useTexture } from '@react-three/drei'
 
 export default function Floor({config}) {
 
