@@ -45,12 +45,13 @@ const cameraControlsRef = useRef()
 
     <Rig />
 
-    <SoftShadows 
+    <SoftShadows  
       size= {config.softShadowSize}
       focus= {config.softShadowFocus}
       samples= {config.softShadowSamples}
-      /> 
-      
+    /> 
+    
+
     <color attach="background" args={[config.backgroundColor]} />
       
     <directionalLight 
