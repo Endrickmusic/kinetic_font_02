@@ -56,22 +56,6 @@ export default function Model() {
      )
     }
 
-    const depthMaterial = new MeshDepthMaterial({
-      depthPacking: RGBADepthPacking
-    })
-
-    depthMaterial.onBeforeCompile = (shader) =>
-    {
-      shader.vertexShader = shader.vertexShader.replace(
-        '#include <begin_vertex>',
-        `
-            #include <begin_vertex>
-
-            transformed.x += 1.0;
-        `
-     )
-    }
-
   return (
     <group>
      
@@ -88,12 +72,10 @@ export default function Model() {
       
         <meshStandardMaterial 
         onBeforeCompile = { onBeforeCompile }
-        color = { 0x0022dd }
-        normalScale = { [0.07, 0.07] }
+        color = { 0xffffff }
         roughness = { 0.0 }
         metalness = { 0 }
         side = { DoubleSide }
-        customDepthMaterial = { depthMaterial }
         />
         
         </Text>   
