@@ -1,4 +1,3 @@
-import React from 'react'
 import { Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { DoubleSide, MeshDepthMaterial, RGBADepthPacking } from 'three'

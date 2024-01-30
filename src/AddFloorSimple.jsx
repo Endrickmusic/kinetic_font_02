@@ -1,12 +1,12 @@
 import { DoubleSide } from 'three'
 
-export default function Floor({config}) {
+export default function Floor() {
 
     return (
         <mesh 
         position = {[0, -1,0]}
         rotation-x={-Math.PI / 2} receiveShadow>
-            <planeGeometry args={[config.floorSizeX, config.floorSizeY]} />
+            <planeGeometry args={[15, 15]} />
             <meshStandardMaterial 
             color={'#ffffff'}
             side={DoubleSide}
