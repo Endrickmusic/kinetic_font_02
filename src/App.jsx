@@ -5,8 +5,6 @@ import { Vector3 } from 'three'
 import './index.css'
 
 import ShaderText from './ShaderText.jsx'
-import AddFloor from './AddFloorSimple.jsx'
-
 
 function App() {
 
@@ -35,8 +33,6 @@ function App() {
       position={[-1,2,0.5]}
       intensity={[16]}
       />
-
-    {/* <AddFloor /> */}
 
     <ShaderText />
 
