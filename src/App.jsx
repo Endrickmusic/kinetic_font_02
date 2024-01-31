@@ -132,7 +132,7 @@ function AddText({ planeRef }) {
             // Output
             vec3 newpos = position;
             float xx = position.x * 0.007;
-            newpos = rotate(newpos, vec3(0.0, 0.0, 1.0), sin(uTime) * xx * xx * xx);
+            newpos = rotate(newpos, vec3(0.0, 1.0, 0.0), abs(sin(uTime)) * xx * xx * xx);
 
             vec4 mvPosition = vec4(newpos, 1.0);
             mvPosition = modelViewMatrix * mvPosition;
