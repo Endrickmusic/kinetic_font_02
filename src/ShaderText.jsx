@@ -65,7 +65,7 @@ export default function Model() {
             '#include <beginnormal_vertex>',
             `
                 #include <beginnormal_vertex>
-                float xx = mapRange(position.y, .00, 1.50, -1.0, .0);
+                float xx = mapRange(position.y, 0.00, 2.50, -1.0, 1.0);
                 // ------> Hier werden die Normals aktualisiert
                 
                   objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 2. *PI);
@@ -92,7 +92,7 @@ export default function Model() {
         vec3 dir = vec3(pos.x, cos(theta), sin(theta));
 
       
-        vec3 circled = vec3(pos.x, dir.yz *4.) + vec3(0., pos.y*dir.y, pos.z*dir.z);
+        vec3 circled = vec3(pos.x, dir.yz *1.5) + vec3(0., pos.y*dir.y, pos.z*dir.y);
 
         transformed = circled;
 
@@ -135,8 +135,11 @@ export default function Model() {
       ref={planeRef}
       rotation={[1.5*Math.PI, 0 , 0 ]}
       position = {[ 0, 0, 0 ]}    
-      maxWidth={2.0}
+      maxWidth={2.2}
       fontSize={0.4}
+      anchorX = {'center'}
+      anchorY = {'middle'}
+      glyphGeometryDetail = {16}
       >
         Lorem ipsum dolor sit amet
         <meshStandardMaterial 
@@ -147,6 +150,7 @@ export default function Model() {
         roughness = { 0.0 }
         metalness = { 0 }
         side = { DoubleSide }
+        
         />
         
         </Text>   
