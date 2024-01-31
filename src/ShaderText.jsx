@@ -65,7 +65,7 @@ export default function Model() {
             '#include <beginnormal_vertex>',
             `
                 #include <beginnormal_vertex>
-                float xx = mapRange(position.x, .06, 5.00, -1.0, 2.9);
+                float xx = mapRange(position.y, .06, 3.00, -1.0, 2.9);
                 // ------> Hier werden die Normals aktualisiert
                 // //   objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 0.5*PI*uTwists*xx + 0.01*uTime*uTwistSpeed);
                 
@@ -84,18 +84,18 @@ export default function Model() {
 
             vec3 pos = transformed;
         // float theta = (0.01*uTime*uRotateSpeed)*PI;
-        float theta = (xx * (abs(sin(uTime)) + 0.07)) * PI;
+        float theta = (xx * (abs(sin(uTime)) - .87)) * (PI/2.);
         
         // ----> Hier wird die Rotation bestimmt
 
         pos = rotate(pos,vec3(1.,0.,0.), -0.5 * PI);
 
-        vec3 dir = vec3(sin(theta), cos(theta), pos.z);
+        vec3 dir = vec3(pos.x, sin(theta), cos(theta));
         // vec3 circled = vec3(dir.xy*uRadius,pos.z) + vec3(pos.y*dir.x,pos.y*dir.y,0.);
         // vec3 circled = vec3(dir.xy*10., pos.z) + vec3(pos.y*dir.x,pos.y*dir.y,0.);
-        vec3 circled = vec3(dir.x*4., dir.y*4., pos.z*12.) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+        vec3 circled = vec3(pos.x, (dir.y*2.)-9., (dir.z*3.)+.5) + vec3(0., pos.y*dir.y + 7., pos.z*dir.z - 2.);
 
-        transformed = circled;
+        transformed = vec3(circled.x, circled.y, circled.z);
         // transformed = pos;
         vUv = uv;
         `
