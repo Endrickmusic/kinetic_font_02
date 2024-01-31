@@ -30,7 +30,7 @@ function AddText({ planeRef }) {
   })
 
   useFrame((state, delta) => {
-  textRef.current.position.y = -position
+  // textRef.current.position.y = -position
   materialRef.current.uniforms.uTime.value += delta
   })
 
@@ -206,7 +206,7 @@ function AddText({ planeRef }) {
             vec4 strokedFragColor = vec4(uStrokeColor, uOpacity * border);
 
             // gl_FragColor = filledFragColor;
-            gl_FragColor = vec4(0.0,0.0,1.0,1.0);
+            gl_FragColor = vec4(1.0,1.0,1.0,1.0);
 
         }
     `,
@@ -264,7 +264,7 @@ function AddText({ planeRef }) {
               receiveShadow
               material={textProperties.material}
               geometry={mesh.geometry}
-              position={[1, index * 0.5, index * 0.0]} // Adjust the spacing between texts
+              position={[1, index * 0.5 - 1., index * 0.0]} // Adjust the spacing between texts
               scale={0.01}
               rotation={[Math.PI, Math.PI, 0]}
             />
@@ -286,7 +286,7 @@ function App() {
     <Canvas camera={{ position: [0, 0, -5], fov: 40 }}>
       <OrbitControls />
       <Environment files="./Environments/envmap.hdr" />
-      <color attach="background" args={['#c1efef']} />
+      <color attach="background" args={['#000000']} />
       <Experience />
       <AddText 
       planeRef ={planeRef}
