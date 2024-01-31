@@ -33,7 +33,9 @@ export default function Model() {
    const customUniforms = {
         uTime: { value: 0 },
         uMin: { value: { x: 0, y: 0, z: 0 } },
-        uMax: { value: { x: 0, y: 0, z: 0 } }
+        uMax: { value: { x: 0, y: 0, z: 0 } },
+        uRotateSpeed: { value: 0.1 },
+        uRadius: { value: 3.0 }
     }
 
     useFrame((state, delta) => {
@@ -48,11 +50,9 @@ export default function Model() {
     shader.vertexShader = 
         `
             uniform float uRotateSpeed;
-            uniform float uTwists;
             uniform float uRadius;
             uniform vec3 uMin;
-            uniform vec3 uMax;
-     
+            uniform vec3 uMax;    
             uniform float uTime;
 
             varying vec2 vUv;
@@ -89,40 +89,41 @@ export default function Model() {
             '#include <beginnormal_vertex>',
             `
                 #include <beginnormal_vertex>
-                // float xx = mapRange(position.x, .06, 5.00, -1.0, 1.);
+
+                // map the text to the circumference
+
                 float xx = mapRange(position.x, uMin.x, uMax.x, -1.0, 1.);
-                // ------> Hier werden die Normals aktualisiert
-                // //   objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 0.5*PI*uTwists*xx + 0.01*uTime*uTwistSpeed);
+
+                // update normals
+
+                objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 0.5*PI*xx + 0.01*uTime);
                 
-                  objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 2. *PI);
-          
-                  // circled normal
-                  objectNormal = rotate(objectNormal, vec3(0.,0.,1.), (0.1)*PI);
-                  vObjectNormal = objectNormal;
+                vObjectNormal = objectNormal;
             `
         )
 
       shader.vertexShader = shader.vertexShader.replace(
         '#include <begin_vertex>',
         `
-            #include <begin_vertex>
+          #include <begin_vertex>
 
-            vec3 pos = transformed;
-        // float theta = (0.01*uTime*uRotateSpeed)*PI;
-        float theta = (xx + uTime * 0.07) * PI;
+          vec3 pos = transformed;
+
+          float theta = (xx + uTime * uRotateSpeed) * PI;
         
-        // ----> Hier wird die Rotation bestimmt
+          // rotate geometry around y axis
 
-        pos = rotate(pos,vec3(1.,0.,0.), -0.5 * PI);
+          pos = rotate(pos, vec3(1.,0.,0.), -0.5 * PI);
 
-        vec3 dir = vec3(sin(theta), cos(theta), pos.z);
-        // vec3 circled = vec3(dir.xy * uRadius, pos.z) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+          // transformdirection vector
+
+          vec3 dir = vec3(sin(theta), cos(theta), pos.z);
       
-        vec3 circled = vec3(dir.xy * 1., pos.z *4.) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+          vec3 circled = vec3(dir.xy * uRadius , pos.z * 4. * uRadius) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
 
-        transformed = circled;
-        // transformed = pos;
-        vUv = uv;
+          transformed = circled;
+    
+          vUv = uv;
         `
      )
 
@@ -139,6 +140,7 @@ export default function Model() {
         
       `#include <dithering_fragment>`,
       `#include <dithering_fragment> 
+      
       // gl_FragColor = vec4(1.,1.,1.,1.);
       // gl_FragColor = vec4(vUv,0.,1.);
 
