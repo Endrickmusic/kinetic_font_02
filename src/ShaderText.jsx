@@ -64,14 +64,14 @@ export default function Model() {
             '#include <beginnormal_vertex>',
             `
                 #include <beginnormal_vertex>
-                float xx = mapRange(position.x, .01, 1.5, -1.0, 1.9);
-                // // ------> Hier werden die Normals aktualisiert
+                float xx = mapRange(position.x, .06, 5.00, -1.0, 2.9);
+                // ------> Hier werden die Normals aktualisiert
                 // //   objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 0.5*PI*uTwists*xx + 0.01*uTime*uTwistSpeed);
                 
-                //   objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 0.5*PI);
+                  objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 2. *PI);
           
-                //   // circled normal
-                //   objectNormal = rotate(objectNormal, vec3(0.,0.,1.), (0.01*uTime*uRotateSpeed)*PI);
+                  // circled normal
+                  objectNormal = rotate(objectNormal, vec3(0.,0.,1.), (0.1)*PI);
             `
         )
 
@@ -82,18 +82,17 @@ export default function Model() {
 
             vec3 pos = transformed;
         // float theta = (0.01*uTime*uRotateSpeed)*PI;
-        float theta = (xx + 0.01)*PI;
+        float theta = (xx)*PI;
         
         // ----> Hier wird die Rotation bestimmt
 
         // pos = rotate(pos,vec3(1.,0.,0.), 0.5*PI*uTwists + 0.01*uTime*uTwistSpeed);
-        // pos = rotate(pos,vec3(1.,0.,0.), 0.5 * uTwists * PI);
-        pos = rotate(pos,vec3(0.,1.,0.), 2. * PI + 0.11);
+        pos = rotate(pos,vec3(1.,0.,0.), -0.5 * PI);
 
         vec3 dir = vec3(sin(theta), cos(theta), pos.z);
         // vec3 circled = vec3(dir.xy*uRadius,pos.z) + vec3(pos.y*dir.x,pos.y*dir.y,0.);
         // vec3 circled = vec3(dir.xy*10., pos.z) + vec3(pos.y*dir.x,pos.y*dir.y,0.);
-        vec3 circled = vec3(pos.xy*2., pos.z) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+        vec3 circled = vec3(dir.xy*5.0, pos.z*12.) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
 
         transformed = circled;
         // transformed = pos;

@@ -25,7 +25,7 @@ function App() {
   <>
     <Canvas 
     camera={{ 
-    position: [0, 11, 0],
+    position: [0, 2, 5],
     fov: 40 }}    
     >
     <OrbitControls/>
@@ -37,6 +37,8 @@ function App() {
       position={[-1,2,0.5]}
       intensity={[16]}
       />
+
+    <ambientLight />
 
     {/* <AddFloor /> */}
 
