@@ -65,9 +65,8 @@ export default function Model() {
             '#include <beginnormal_vertex>',
             `
                 #include <beginnormal_vertex>
-                float xx = mapRange(position.x, .06, 5.00, -1.0, 2.9);
+                float xx = mapRange(position.y, .00, 1.50, -1.0, .0);
                 // ------> Hier werden die Normals aktualisiert
-                // //   objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 0.5*PI*uTwists*xx + 0.01*uTime*uTwistSpeed);
                 
                   objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 2. *PI);
           
@@ -83,20 +82,20 @@ export default function Model() {
             #include <begin_vertex>
 
             vec3 pos = transformed;
-        // float theta = (0.01*uTime*uRotateSpeed)*PI;
-        float theta = (xx + uTime * 0.07) * PI;
+
+        float theta = (xx + uTime * 0.27) * PI;
         
         // ----> Hier wird die Rotation bestimmt
 
-        pos = rotate(pos,vec3(1.,0.,0.), -0.5 * PI);
+        pos = rotate(pos, vec3(1.,0.,0.), -0.5 * PI);
 
-        vec3 dir = vec3(sin(theta), cos(theta), pos.z);
-        // vec3 circled = vec3(dir.xy * uRadius, pos.z) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+        vec3 dir = vec3(pos.x, cos(theta), sin(theta));
+
       
-        vec3 circled = vec3(dir.xy * 2., pos.z *4.) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+        vec3 circled = vec3(pos.x, dir.yz *4.) + vec3(0., pos.y*dir.y, pos.z*dir.z);
 
         transformed = circled;
-        // transformed = pos;
+
         vUv = uv;
         `
      )
@@ -136,7 +135,7 @@ export default function Model() {
       ref={planeRef}
       rotation={[1.5*Math.PI, 0 , 0 ]}
       position = {[ 0, 0, 0 ]}    
-      maxWidth={7}
+      maxWidth={2.0}
       fontSize={0.4}
       >
         Lorem ipsum dolor sit amet
