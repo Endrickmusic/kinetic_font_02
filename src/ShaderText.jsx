@@ -84,16 +84,16 @@ export default function Model() {
 
             vec3 pos = transformed;
         // float theta = (0.01*uTime*uRotateSpeed)*PI;
-        float theta = (xx * (abs(sin(uTime)) + 0.07)) * PI;
+        float theta = (xx + uTime * 0.07) * PI;
         
         // ----> Hier wird die Rotation bestimmt
 
         pos = rotate(pos,vec3(1.,0.,0.), -0.5 * PI);
 
         vec3 dir = vec3(sin(theta), cos(theta), pos.z);
-        // vec3 circled = vec3(dir.xy*uRadius,pos.z) + vec3(pos.y*dir.x,pos.y*dir.y,0.);
-        // vec3 circled = vec3(dir.xy*10., pos.z) + vec3(pos.y*dir.x,pos.y*dir.y,0.);
-        vec3 circled = vec3(dir.x*4., dir.y*4., pos.z*12.) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+        // vec3 circled = vec3(dir.xy * uRadius, pos.z) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+      
+        vec3 circled = vec3(dir.xy * 2., pos.z *4.) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
 
         transformed = circled;
         // transformed = pos;
