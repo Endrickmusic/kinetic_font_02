@@ -84,17 +84,16 @@ export default function Model() {
 
             vec3 pos = transformed;
         // float theta = (0.01*uTime*uRotateSpeed)*PI;
-        float theta = (xx)*PI;
+        float theta = (xx * (abs(sin(uTime)) + 0.07)) * PI;
         
         // ----> Hier wird die Rotation bestimmt
 
-        // pos = rotate(pos,vec3(1.,0.,0.), 0.5*PI*uTwists + 0.01*uTime*uTwistSpeed);
         pos = rotate(pos,vec3(1.,0.,0.), -0.5 * PI);
 
         vec3 dir = vec3(sin(theta), cos(theta), pos.z);
         // vec3 circled = vec3(dir.xy*uRadius,pos.z) + vec3(pos.y*dir.x,pos.y*dir.y,0.);
         // vec3 circled = vec3(dir.xy*10., pos.z) + vec3(pos.y*dir.x,pos.y*dir.y,0.);
-        vec3 circled = vec3(dir.xy*5.0, pos.z*12.) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+        vec3 circled = vec3(dir.x*4., dir.y*4., pos.z*12.) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
 
         transformed = circled;
         // transformed = pos;
@@ -115,14 +114,14 @@ export default function Model() {
         
       `#include <dithering_fragment>`,
       `#include <dithering_fragment> 
-      // gl_FragColor = vec4(1.,0.,0.,1.);
+      // gl_FragColor = vec4(1.,1.,1.,1.);
       // gl_FragColor = vec4(vUv,0.,1.);
 
       // Convert normal to RGB color (assuming normals are in the range [-1, 1])
       vec3 color = (vObjectNormal + 1.0) * 0.5; // Map [-1, 1] to [0, 1]
   
       // Output color
-      gl_FragColor = vec4(color, 1.0);
+      // gl_FragColor = vec4(color, 1.0);
     `
     )
     
@@ -145,7 +144,7 @@ export default function Model() {
         onBeforeCompile = { onBeforeCompile }
         ref={refMaterial} 
         attach="material" 
-        // color = { 0xffffff }
+        color = { 0xffffff }
         roughness = { 0.0 }
         metalness = { 0 }
         side = { DoubleSide }
