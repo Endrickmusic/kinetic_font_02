@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Environment, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
-import { MSDFTextGeometry, MSDFTextMaterial } from 'three-msdf-text-utils'
+import MSDFTextGeometry from './MSDFTextGeometry/index.js';
 import { uniforms } from "three-msdf-text-utils"
-import VirtualScroll from 'virtual-scroll'
+
 import './index.css'
 import Experience from './Experience.jsx'
 
@@ -17,17 +17,6 @@ function AddText({ planeRef }) {
 
   const textRef = useRef()
   const materialRef = useRef()
-
-  let position = 0
-  let speed = 0
-  let targetspeed = 0
-  const scroller = new VirtualScroll()
-  scroller.on(event => {
-	// wrapper.style.transform = `translateY(${event.y}px)`
-  position = event.y / 2000
-  speed = event.deltaY / 1000
-  
-  })
 
   useFrame((state, delta) => {
   // textRef.current.position.y = -position
@@ -132,7 +121,7 @@ function AddText({ planeRef }) {
             // Output
             vec3 newpos = position;
             float xx = position.x * 0.007;
-            newpos = rotate(newpos, vec3(0.0, 1.0, 0.0), abs(sin(uTime)) * xx * xx * xx);
+            newpos = rotate(newpos, vec3(1.0, 0.0, 0.0), abs(sin(uTime)) * xx * xx * xx);
 
             vec4 mvPosition = vec4(newpos, 1.0);
             mvPosition = modelViewMatrix * mvPosition;
@@ -276,7 +265,7 @@ function AddText({ planeRef }) {
   )
 }
 
-const TEXT = ['Christian', 'Hohenbild', 'Endrick', 'Portfolio'];
+const TEXT = ['Lorem Ipsum', 'dolor sit', 'consectetuer', 'sed diam'];
 
 function App() {
 
