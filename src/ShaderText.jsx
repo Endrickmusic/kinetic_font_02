@@ -138,6 +138,7 @@ export default function Model() {
       position = {[ 0, 0, 0 ]}    
       maxWidth={7}
       fontSize={0.4}
+      glyphGeometryDetail = {16}
       >
         Lorem ipsum dolor sit amet
         <meshStandardMaterial 
