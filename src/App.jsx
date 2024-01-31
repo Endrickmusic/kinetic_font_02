@@ -1,10 +1,14 @@
 import { useEffect } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
+import { OrbitControls } from '@react-three/drei'
 import { Vector3 } from 'three'
 
 import './index.css'
 
 import ShaderText from './ShaderText.jsx'
+import AddFloor from './AddFloorSimple.jsx'
+
+
 
 function App() {
 
@@ -24,7 +28,7 @@ function App() {
     position: [0, 11, 0],
     fov: 40 }}    
     >
-
+    <OrbitControls/>
     <Rig />
 
     <color attach="background" args={[0x000000]} />
@@ -33,6 +37,8 @@ function App() {
       position={[-1,2,0.5]}
       intensity={[16]}
       />
+
+    {/* <AddFloor /> */}
 
     <ShaderText />
 

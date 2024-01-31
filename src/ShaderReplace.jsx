@@ -1,8 +1,7 @@
 // Isolated replace shader
 
 
- export const onBeforeCompile = (shader) => 
- {
+ export default function onBeforeCompile(shader){
  shader.uniforms.uTime = customUniforms.uTime
 
  shader.vertexShader = shader.vertexShader.replace(
