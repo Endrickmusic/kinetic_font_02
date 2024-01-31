@@ -31,9 +31,7 @@ function AddText({ planeRef }) {
 
   useFrame((state, delta) => {
   textRef.current.position.y = -position
-  speed *= 0.9
-  targetspeed += ( speed - targetspeed ) * 0.1
-  materialRef.current.uniforms.uSpeed.value = targetspeed
+  materialRef.current.uniforms.uTime.value += delta
   })
 
   const material = new THREE.ShaderMaterial({
@@ -47,7 +45,7 @@ function AddText({ planeRef }) {
     },
     uniforms: {
 
-        uSpeed : { value: 0 },
+        uTime : { value: 0 },
 
         // Common
         ...uniforms.common,
@@ -109,7 +107,7 @@ function AddText({ planeRef }) {
         return (m * vec4(v, 1.0)).xyz;
       }
 
-      uniform float uSpeed;
+      uniform float uTime;
 
         void main() {
           
@@ -134,7 +132,7 @@ function AddText({ planeRef }) {
             // Output
             vec3 newpos = position;
             float xx = position.x * 0.007;
-            newpos = rotate(newpos, vec3(0.0, 0.0, 1.0), uSpeed * xx * xx * xx);
+            newpos = rotate(newpos, vec3(0.0, 0.0, 1.0), sin(uTime) * xx * xx * xx);
 
             vec4 mvPosition = vec4(newpos, 1.0);
             mvPosition = modelViewMatrix * mvPosition;
