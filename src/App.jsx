@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Environment, shaderMaterial } from '@react-three/drei'
+import { Environment, OrbitControls } from '@react-three/drei'
 import * as THREE from 'three'
 import { MSDFTextGeometry, MSDFTextMaterial } from 'three-msdf-text-utils'
 import { uniforms } from "three-msdf-text-utils"
@@ -284,6 +284,7 @@ function App() {
 
   return (
     <Canvas camera={{ position: [0, 0, -5], fov: 40 }}>
+      <OrbitControls />
       <Environment files="./Environments/envmap.hdr" />
       <color attach="background" args={['#c1efef']} />
       <Experience />
