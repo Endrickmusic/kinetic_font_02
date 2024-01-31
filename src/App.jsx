@@ -32,10 +32,8 @@ function AddText({ planeRef }) {
   useFrame((state, delta) => {
   textRef.current.position.y = -position
   speed *= 0.9
-  // console.log(material.uniforms.uSpeed.value)
   targetspeed += ( speed - targetspeed ) * 0.1
   materialRef.current.uniforms.uSpeed.value = targetspeed
-  planeRef.current.rotation.y = position
   })
 
   const material = new THREE.ShaderMaterial({
@@ -294,19 +292,6 @@ function App() {
       <AddText 
       planeRef ={planeRef}
       />
-      <mesh
-        ref = {planeRef}
-        position = {[ 0,1,1 ]}
-        
-        >
-          <planeGeometry 
-            args={ [1, .6] }
-            
-            />
-          <meshNormalMaterial 
-            side = {THREE.DoubleSide}
-          />
-        </mesh>  
     </Canvas>
   );
 }
