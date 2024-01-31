@@ -1,16 +1,39 @@
 import { Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { DoubleSide } from 'three'
-import { useRef } from 'react'
+import { DoubleSide, Vector3 } from 'three'
+import { useRef, useEffect, useLayoutEffect } from 'react'
 
 
 export default function Model() {
 
-  const planeRef = useRef()
+  const textRef = useRef()
   const refMaterial = useRef()
+  const fontSize = 0.2
+
+  useEffect(
+    (state, delta) => {
+     console.log(refMaterial.current)
+     console.log(textRef.current)
+    }, [])
+
+  useLayoutEffect(() => {
+    let shader = refMaterial.current.userData.shader
+    if (shader) {
+      shader.uniforms.uMin.value = textRef.current.geometry.boundingBox.min
+      shader.uniforms.uMax.value = textRef.current.geometry.boundingBox.max
+      shader.uniforms.uMax.value.x += fontSize / 6
+    }
+    customUniforms.uMin.value = textRef.current.geometry.boundingBox.min
+    customUniforms.uMax.value = textRef.current.geometry.boundingBox.max
+    // space after text
+    customUniforms.uMax.value.x += fontSize / 6
+    console.log(textRef.current.geometry.boundingBox)
+  })
 
    const customUniforms = {
-        uTime: { value: 0 }
+        uTime: { value: 0 },
+        uMin: { value: { x: 0, y: 0, z: 0 } },
+        uMax: { value: { x: 0, y: 0, z: 0 } }
     }
 
     useFrame((state, delta) => {
@@ -19,7 +42,8 @@ export default function Model() {
 
     const onBeforeCompile = (shader) => 
     {
-    shader.uniforms.uTime = customUniforms.uTime
+    // shader.uniforms.uTime = customUniforms.uTime
+    shader.uniforms = {...customUniforms, ...shader.uniforms }  
 
     shader.vertexShader = 
         `
@@ -65,7 +89,8 @@ export default function Model() {
             '#include <beginnormal_vertex>',
             `
                 #include <beginnormal_vertex>
-                float xx = mapRange(position.x, .06, 5.00, -1.0, 2.9);
+                // float xx = mapRange(position.x, .06, 5.00, -1.0, 1.);
+                float xx = mapRange(position.x, uMin.x, uMax.x, -1.0, 1.);
                 // ------> Hier werden die Normals aktualisiert
                 // //   objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 0.5*PI*uTwists*xx + 0.01*uTime*uTwistSpeed);
                 
@@ -93,7 +118,7 @@ export default function Model() {
         vec3 dir = vec3(sin(theta), cos(theta), pos.z);
         // vec3 circled = vec3(dir.xy * uRadius, pos.z) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
       
-        vec3 circled = vec3(dir.xy * 2., pos.z *4.) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+        vec3 circled = vec3(dir.xy * 1., pos.z *4.) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
 
         transformed = circled;
         // transformed = pos;
@@ -133,11 +158,11 @@ export default function Model() {
      
      <Text 
       castShadow
-      ref={planeRef}
+      ref={textRef}
       rotation={[1.5*Math.PI, 0 , 0 ]}
       position = {[ 0, 0, 0 ]}    
-      maxWidth={7}
-      fontSize={0.4}
+      maxWidth={3.2}
+      fontSize={fontSize}
       glyphGeometryDetail = {16}
       >
         Lorem ipsum dolor sit amet
