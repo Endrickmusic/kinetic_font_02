@@ -32,6 +32,7 @@ export default function Model() {
             uniform float uTime;
 
             varying vec2 vUv;
+            varying vec3 vObjectNormal;
       
             float PI = 3.141592653589793238;
 
@@ -72,6 +73,7 @@ export default function Model() {
           
                   // circled normal
                   objectNormal = rotate(objectNormal, vec3(0.,0.,1.), (0.1)*PI);
+                  vObjectNormal = objectNormal;
             `
         )
 
@@ -96,8 +98,34 @@ export default function Model() {
 
         transformed = circled;
         // transformed = pos;
+        vUv = uv;
         `
      )
+
+     shader.fragmentShader = shader.fragmentShader.replace(
+        
+      `#include <common>`,
+      `#include <common> 
+      varying vec2 vUv;
+      varying vec3 vObjectNormal;
+    `
+    )
+
+    shader.fragmentShader = shader.fragmentShader.replace(
+        
+      `#include <dithering_fragment>`,
+      `#include <dithering_fragment> 
+      // gl_FragColor = vec4(1.,0.,0.,1.);
+      // gl_FragColor = vec4(vUv,0.,1.);
+
+      // Convert normal to RGB color (assuming normals are in the range [-1, 1])
+      vec3 color = (vObjectNormal + 1.0) * 0.5; // Map [-1, 1] to [0, 1]
+  
+      // Output color
+      gl_FragColor = vec4(color, 1.0);
+    `
+    )
+    
      refMaterial.current.userData.shader = shader
     }
 
@@ -117,7 +145,7 @@ export default function Model() {
         onBeforeCompile = { onBeforeCompile }
         ref={refMaterial} 
         attach="material" 
-        color = { 0xffffff }
+        // color = { 0xffffff }
         roughness = { 0.0 }
         metalness = { 0 }
         side = { DoubleSide }
