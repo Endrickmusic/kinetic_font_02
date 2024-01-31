@@ -6,8 +6,6 @@ import { Vector3 } from 'three'
 import './index.css'
 
 import ShaderText from './ShaderText.jsx'
-import AddFloor from './AddFloorSimple.jsx'
-
 
 
 function App() {
@@ -17,7 +15,7 @@ function App() {
     const vec = new Vector3()
   
     return useEffect(() => {
-      camera.lookAt(0, 0, 0)
+      camera.lookAt(0, -1, 0)
     }), []
   }
 
@@ -25,7 +23,7 @@ function App() {
   <>
     <Canvas 
     camera={{ 
-    position: [0, 2, 5],
+    position: [0, 4, 9],
     fov: 40 }}    
     >
     <OrbitControls/>
@@ -39,8 +37,6 @@ function App() {
       />
 
     <ambientLight />
-
-    {/* <AddFloor /> */}
 
     <ShaderText />
 

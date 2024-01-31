@@ -1,6 +1,6 @@
 import { Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { DoubleSide, MeshDepthMaterial, RGBADepthPacking } from 'three'
+import { DoubleSide } from 'three'
 import { useRef } from 'react'
 
 
@@ -135,7 +135,7 @@ export default function Model() {
       castShadow
       ref={planeRef}
       rotation={[1.5*Math.PI, 0 , 0 ]}
-      position = {[ 0,0,0 ]}    
+      position = {[ 0, 0, 0 ]}    
       maxWidth={7}
       fontSize={0.4}
       >
