@@ -119,7 +119,7 @@ export default function Model() {
 
           vec3 dir = vec3(sin(theta), cos(theta), pos.z);
       
-          vec3 circled = vec3(dir.xy * uRadius , pos.z * 4. * uRadius) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
+          vec3 circled = vec3(dir.x, dir.y, pos.z) + vec3(pos.y*dir.x, pos.y*dir.y, 0.);
 
           transformed = circled;
     
