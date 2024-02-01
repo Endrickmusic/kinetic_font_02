@@ -86,13 +86,16 @@ export default function Model() {
         `  + shader.vertexShader
       
     shader.vertexShader = shader.vertexShader.replace(
+
             '#include <beginnormal_vertex>',
             `
                 #include <beginnormal_vertex>
 
                 // map the text to the circumference
 
-                float xx = mapRange(position.x, uMin.x, uMax.x, -1.0, 1.);
+                float distance = 0.05 // distance to text begin
+
+                float xx = mapRange(position.x, uMin.x, uMax.x + distance, -1.0, 1.);
 
                 // update normals
 
@@ -167,7 +170,7 @@ export default function Model() {
       fontSize={fontSize}
       glyphGeometryDetail = {16}
       >
-        Lorem ipsum dolor sit amet
+         Lorem ipsum dolor sit amet
         <meshStandardMaterial 
         onBeforeCompile = { onBeforeCompile }
         ref={refMaterial} 
