@@ -93,7 +93,7 @@ export default function Model() {
 
                 // map the text to the circumference
 
-                float distance = 0.05 // distance to text begin
+                float distance = 0.05; // distance to text begin
 
                 float xx = mapRange(position.x, uMin.x, uMax.x + distance, -1.0, 1.);
 
@@ -164,7 +164,7 @@ export default function Model() {
      <Text 
       castShadow
       ref={textRef}
-      rotation={[1.5*Math.PI, 0 , 0 ]}
+      rotation={[ 0, 0, 0 ]}
       position = {[ 0, 0, 0 ]}    
       maxWidth={3.2}
       fontSize={fontSize}

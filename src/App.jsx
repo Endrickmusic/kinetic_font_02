@@ -15,7 +15,7 @@ function App() {
     const vec = new Vector3()
   
     return useEffect(() => {
-      camera.lookAt(0, -1, 0)
+      camera.lookAt(0, 0, 0)
     }), []
   }
 
@@ -23,7 +23,7 @@ function App() {
   <>
     <Canvas 
     camera={{ 
-    position: [0, 4, 9],
+    position: [0, 0, 2],
     fov: 40 }}    
     >
     <OrbitControls/>
@@ -32,7 +32,7 @@ function App() {
     <color attach="background" args={[0x000000]} />
       
     <directionalLight 
-      position={[-1,2,0.5]}
+      position={[-1,0,0.5]}
       intensity={[16]}
       />
 
