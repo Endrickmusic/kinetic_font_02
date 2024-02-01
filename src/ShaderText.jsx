@@ -90,7 +90,7 @@ export default function Model() {
 
             // update normals
 
-            objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 0.5 * PI * xx + 0.01 * uTime);
+            objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 0.5 * PI * xx);
             
             vObjectNormal = objectNormal;
             `
@@ -107,7 +107,7 @@ export default function Model() {
         
             // rotate geometry around y axis
   
-            pos = rotate(pos, vec3(1.,0.,0.), -0.5 * PI);
+            pos = rotate(pos, vec3(1.,0.,0.), 0.5 * PI * xx);
 
             // transform direction vector
 
@@ -164,7 +164,7 @@ export default function Model() {
       anchorY = {'middle'}
       glyphGeometryDetail = {16}
       >
-        Lorem ipsum dolor sit amet
+        Hallo Nils, wie läufts?
         <meshStandardMaterial 
         onBeforeCompile = { onBeforeCompile }
         ref={refMaterial} 
