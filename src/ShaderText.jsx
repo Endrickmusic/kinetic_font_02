@@ -1,16 +1,36 @@
 import { Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import { DoubleSide } from 'three'
-import { useRef } from 'react'
+import { useRef, useLayoutEffect } from 'react'
 
 
 export default function Model() {
 
-  const planeRef = useRef()
+  const textRef = useRef()
   const refMaterial = useRef()
 
+  const fontSize = 0.2
+
+  useLayoutEffect(() => {
+    let shader = refMaterial.current.userData.shader
+    if (shader) {
+      shader.uniforms.uMin.value = textRef.current.geometry.boundingBox.min
+      shader.uniforms.uMax.value = textRef.current.geometry.boundingBox.max
+      shader.uniforms.uMax.value.x += fontSize / 6
+    }
+    customUniforms.uMin.value = textRef.current.geometry.boundingBox.min
+    customUniforms.uMax.value = textRef.current.geometry.boundingBox.max
+    // space after text
+    customUniforms.uMax.value.x += fontSize / 6
+    console.log(textRef.current.geometry.boundingBox)
+  })
+
    const customUniforms = {
-        uTime: { value: 0 }
+        uTime: { value: 0 },
+        uMin: { value: { x: 0, y: 0, z: 0 } },
+        uMax: { value: { x: 0, y: 0, z: 0 } },
+        uRotateSpeed: { value: 0.1 },
+        uRadius: { value: 3.2 }
     }
 
     useFrame((state, delta) => {
@@ -19,16 +39,14 @@ export default function Model() {
 
     const onBeforeCompile = (shader) => 
     {
-    shader.uniforms.uTime = customUniforms.uTime
+    shader.uniforms = {...customUniforms, ...shader.uniforms }  
 
     shader.vertexShader = 
         `
             uniform float uRotateSpeed;
-            uniform float uTwists;
             uniform float uRadius;
             uniform vec3 uMin;
-            uniform vec3 uMax;
-     
+            uniform vec3 uMax;    
             uniform float uTime;
 
             varying vec2 vUv;
@@ -64,15 +82,17 @@ export default function Model() {
     shader.vertexShader = shader.vertexShader.replace(
             '#include <beginnormal_vertex>',
             `
-                #include <beginnormal_vertex>
-                float xx = mapRange(position.y, 0.00, 2.50, -1.0, 1.0);
-                // ------> Hier werden die Normals aktualisiert
-                
-                  objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 2. *PI);
-          
-                  // circled normal
-                  objectNormal = rotate(objectNormal, vec3(0.,0.,1.), (0.1)*PI);
-                  vObjectNormal = objectNormal;
+            #include <beginnormal_vertex>
+
+            // map the text to the circumference
+
+            float xx = mapRange(position.y, uMin.y, uMax.y, -1.0, 1.);
+
+            // update normals
+
+            objectNormal = rotate(objectNormal, vec3(1.,0.,0.), 0.5 * PI * xx + 0.01 * uTime);
+            
+            vObjectNormal = objectNormal;
             `
         )
 
@@ -83,20 +103,21 @@ export default function Model() {
 
             vec3 pos = transformed;
 
-        float theta = (xx + uTime * 0.27) * PI;
+            float theta = (xx + uTime * uRotateSpeed) * PI;
         
-        // ----> Hier wird die Rotation bestimmt
+            // rotate geometry around y axis
+  
+            pos = rotate(pos, vec3(1.,0.,0.), -0.5 * PI);
 
-        pos = rotate(pos, vec3(1.,0.,0.), -0.5 * PI);
+            // transform direction vector
 
-        vec3 dir = vec3(pos.x, cos(theta), sin(theta));
+            vec3 dir = vec3(pos.x, cos(theta), sin(theta));
 
-      
-        vec3 circled = vec3(pos.x, dir.yz *1.5) + vec3(0., pos.y*dir.y, pos.z*dir.y);
+            vec3 circled = vec3(pos.x * 4. * uRadius, dir.yz * uRadius) + vec3(0., pos.y * dir.y, pos.z * dir.y);
 
-        transformed = circled;
+            transformed = circled;
 
-        vUv = uv;
+            vUv = uv;
         `
      )
 
@@ -132,10 +153,10 @@ export default function Model() {
      
      <Text 
       castShadow
-      ref={planeRef}
+      ref={textRef}
       rotation={[1.5*Math.PI, 0 , 0 ]}
       position = {[ 0, 0, 0 ]}    
-      maxWidth={2.2}
+      maxWidth={1.2}
       fontSize={0.4}
       anchorX = {'center'}
       anchorY = {'middle'}
