@@ -111,7 +111,9 @@ export default function Model() {
 
             // transform direction vector
 
-            vec3 dir = vec3(pos.x, cos(theta), sin(theta));
+            float loops = 1.0;  // add artsy loops
+
+            vec3 dir = vec3(pos.x, cos(theta), sin(theta * loops));
 
             vec3 circled = vec3(pos.x * 4. * uRadius, dir.yz * uRadius) + vec3(0., pos.y * dir.y, pos.z * dir.y);
 
