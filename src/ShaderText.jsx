@@ -113,7 +113,7 @@ export default function Model() {
         
           // rotate geometry around y axis
 
-          pos = rotate(pos, vec3(1.,0.,0.), -0.5 * PI);
+          pos = rotate(pos, vec3(1.,0.,0.), 2. * PI);
 
           // transformdirection vector
 
